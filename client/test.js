@@ -11,26 +11,43 @@ const mapDispatchToProps = (dispatch) => ( {getPlayer: id => dispatch(getPlayer(
 class Test extends Component {
  constructor(props) {
   super(props)
+  this.state = {
+   id: '',
+   gameState: {
+    players: [],
+    gameDeck: ''
+   }
+  }
   socket = io.connect()
   socket.on('clientId', (id) => {
-   this.props.getPlayer(id)
+   this.setState({id})
+  })
+  socket.on('gameState', (gameState) => {
+   this.setState({gameState})
   })
  }
+
+ shuffle() {
+  socket.emit('shuffle')
+ }
+
+ deal() {
+  socket.emit('deal')
+ }
  render() {
-  console.log("clientPlayer", this.props.state.clientPlayer)
-  let players = []
-  if (this.props.state.gameState.players) {
-   players = this.props.state.gameState.players
-  }
+ 
+  const players = this.state.gameState.players
+  const deck = this.state.gameState.gameDeck
+  console.log('players', players)
+  console.log('deck', deck)
+  const id = this.state.id
   return (
    <div>
    <div className="container">
     <img src="poker_table.svg" />
-    <div className="seat-1">
-    <button > Deal </button>
-    <button > Click </button>
-    </div>
-    <Seats players={players} />
+    <Seats id={id} players={players} />
+    <button onClick={this.shuffle}>Shuffle </button>
+    <button onClick={this.deal}>Deal</button>
     </div>
     <p>Number of players: {players.length} </p>
     </div>
