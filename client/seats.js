@@ -1,8 +1,9 @@
 import React from 'react';
+import Button from './Button';
 
 const Seats = (props) => {
 	const players = props.players;
-	const clientPlayer = players.filter((player) => player.id === props.id);
+	const clientPlayer = props.clientPlayer
 
 	const clientPosition = players.map((player) => player.id).indexOf(props.id);
 	for (let i = 0; i < players.length; i++) {
@@ -15,10 +16,18 @@ const Seats = (props) => {
 	if (clientPlayer[0]) {
 		return (
 			<div>
-				<div className="seat-1">{clientPlayer[0].id}</div>
+				<div key={clientPlayer[0].id} className="seat-1">
+					{clientPlayer[0].id}
+					<Button key={clientPlayer[0].id} button={clientPlayer[0].button} />
+				</div>
 				{players.map((player) => {
 					if (player.id !== props.id) {
-						return <div className={'seat-' + player.seat}>{player.id}</div>;
+						return (
+							<div key={player.id} className={'seat-' + player.seat}>
+								{player.id}
+								<Button button={player.button} />
+							</div>
+						);
 					}
 				})}
 			</div>

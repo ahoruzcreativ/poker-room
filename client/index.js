@@ -5,11 +5,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {Provider} from 'react-redux'
 import store from './store/store'
-import Test from './test'
+import Game from './game'
 
 ReactDOM.render(
   <Provider store={store}>
-<Test />
+<Game />
   </Provider>,
   document.getElementById('app')
 )
