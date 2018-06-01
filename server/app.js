@@ -100,10 +100,15 @@ io.on('connection', (socket) => {
 			if (players[i].id === socket.id) {
 				players[i].check = true;
 				players[i].active = false;
-				if (i + 1 < players.length) {
-					players[i + 1].active = true;
+				// check if this is the last player to act before the round, if so then need to switch order for post-flop
+				if (players.map(player => player.check).filter(check => check === false).length < 1 && gameState.action === 'preflop') {
+					players[i].active = true
 				} else {
-					players[0].active = true;
+						if (i + 1 < players.length) {
+							players[i + 1].active = true;
+						} else {
+							players[0].active = true;
+						}
 				}
 			}
 		}
@@ -131,7 +136,7 @@ io.on('connection', (socket) => {
 			players.forEach((player) => {
 				player.check = false;
 			});
-			gameState.gameDeck.dealCards(2).forEach( card => gameState.board.push(card))
+			gameState.gameDeck.dealCards(1).forEach( card => gameState.board.push(card))
 		} else if (gameState.action === 'turn') {
 			gameState.action = 'river';
 			players.forEach((player) => {
