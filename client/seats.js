@@ -1,5 +1,6 @@
 import React from 'react';
-import Button from './Button';
+import Blinds from './Blinds';
+import PlayerCards from './playerCards'
 
 const Seats = (props) => {
 	const players = props.players;
@@ -17,15 +18,17 @@ const Seats = (props) => {
 		return (
 			<div>
 				<div key={clientPlayer[0].id} className="seat-1">
+				<PlayerCards player={clientPlayer[0]} />
 					{clientPlayer[0].id}
-					<Button key={clientPlayer[0].id} button={clientPlayer[0].button} />
+					<Blinds key={clientPlayer[0].id} bigBlind={clientPlayer[0].bigBlind} button={clientPlayer[0].button} />
 				</div>
 				{players.map((player) => {
 					if (player.id !== props.id) {
 						return (
 							<div key={player.id} className={'seat-' + player.seat}>
+							<PlayerCards player={player} />
 								{player.id}
-								<Button button={player.button} />
+								<Blinds key={player.id} bigBlind={player.bigBlind} button={player.button} />
 							</div>
 						);
 					}

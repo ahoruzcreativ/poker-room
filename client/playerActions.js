@@ -10,6 +10,7 @@ const Actions = (props) => {
 					return (
 						<div key={player.id}>
 							<button onClick={props.check}>Check</button>
+							<button onClick={props.fold}>Fold</button>
 						</div>
 					);
 				}
