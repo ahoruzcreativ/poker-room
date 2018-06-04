@@ -1,10 +1,8 @@
 import React from 'react';
-import Blinds from './Blinds';
-import PlayerCards from './playerCards'
 
 const Seats = (props) => {
 	const players = props.players;
-	const clientPlayer = props.clientPlayer
+	const clientPlayer = props.clientPlayer;
 
 	const clientPosition = players.map((player) => player.id).indexOf(props.id);
 	for (let i = 0; i < players.length; i++) {
@@ -18,17 +16,25 @@ const Seats = (props) => {
 		return (
 			<div>
 				<div key={clientPlayer[0].id} className="seat-1">
-				<PlayerCards player={clientPlayer[0]} />
-					{clientPlayer[0].id}
-					<Blinds key={clientPlayer[0].id} bigBlind={clientPlayer[0].bigBlind} button={clientPlayer[0].button} />
+					<div>
+						<img className="avatar" src="/avatars/rat.png" />
+					</div>
+					<div className="player">
+						<div>{clientPlayer[0].id}</div>
+						<div>${clientPlayer[0].bankroll}</div>
+					</div>
 				</div>
 				{players.map((player) => {
 					if (player.id !== props.id) {
 						return (
-							<div key={player.id} className={'seat-' + player.seat}>
-							<PlayerCards player={player} />
-								{player.id}
-								<Blinds key={player.id} bigBlind={player.bigBlind} button={player.button} />
+							<div key={player.id} className={'seat-2'}>
+								<div>
+									<img className="avatar" src="/avatars/rabbit.png" />
+								</div>
+								<div className="player">
+									<div> {player.id}</div>
+									<div>${player.bankroll}</div>
+								</div>
 							</div>
 						);
 					}

@@ -7,6 +7,7 @@ import Actions from './playerActions';
 import Board from './Board';
 import SoundEffects from './SoundEffects';
 import { setTimeout } from 'timers';
+import Card from './CardImages';
 
 let socket;
 const mapStateToProps = (state) => ({ state });
@@ -38,13 +39,12 @@ class Test extends Component {
 			this.setState({ gameState });
 		});
 		socket.on('sound', (soundEffect) => {
-			this.setState({sound: soundEffect})
-			setTimeout(	() => {
-				this.setState({sound: 'none'})
-			}, 500)
-		})
+			this.setState({ sound: soundEffect });
+			setTimeout(() => {
+				this.setState({ sound: 'none' });
+			}, 500);
+		});
 	}
-
 
 	fold() {
 		const action = { type: 'fold' };
@@ -76,9 +76,9 @@ class Test extends Component {
 		const id = this.state.id;
 		const clientPlayer = players.filter((player) => player.id === id);
 		return (
-			<div>
+			<div >
 				<div className="container">
-					<img src="poker_table.svg" />
+					<img className="table" src="poker_table.svg" />
 					<SoundEffects sound={this.state.sound} />
 					<Seats clientPlayer={clientPlayer} id={id} players={players} />
 					<Actions

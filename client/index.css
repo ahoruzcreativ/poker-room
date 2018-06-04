@@ -2,6 +2,7 @@
   height: 100%;
   width: 100%;
   margin: 0;
+  background-color: #363b44
 }
 
 /* demo styles */
@@ -12,21 +13,73 @@
 
 .container {
   position: relative;
-  width: 50%;
+  width: 100%;
   text-align: center;
   align-content: center
 }
 
 /* Make the image responsive */
-.container img {
-  width: 100%;
-  height: auto;
+
+.avatar {
+  height: 70px;
+  width: 70px
 }
 
+.player {
+text-align: center;
+vertical-align: middle;
+padding-top: 20px;
+padding-left: 30px
+}
+
+.table {
+  margin-top: 80px;
+  width: 60%;
+  height: 60%;
+}
+
+div {
+  font-size: 16px;
+}
 /* Style the button and place it in the middle of the container/image */
 .seat-1 {
+  border-radius: 25px;
+  display: flex;
   position: absolute;
-  top: 75%;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #26787c;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+}
+
+.seat-2 {
+  border-radius: 25px;
+  display: flex;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #26787c;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+}
+
+.board {
+  width: 35%;
+  height:25%;
+  display: flex;
+  position: absolute;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
@@ -39,34 +92,7 @@
   border-radius: 5px;
 }
 
-.seat-2 {
-  position: absolute;
-  top: 60%;
-  left: 10%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  background-color: #555;
-  color: white;
-  font-size: 16px;
-  padding: 12px 24px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-}
-
-.seat-3 {
-  position: absolute;
-  top: 20%;
-  left: 10%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  background-color: #555;
-  color: white;
-  font-size: 16px;
-  padding: 12px 24px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
+.boardCards {
 }
 
 .seat-4 {
