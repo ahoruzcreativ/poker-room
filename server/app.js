@@ -14,7 +14,10 @@ const {
 	playerActionCheck,
 	changeBoard,
 	removePlayer,
-	fold
+	fold,
+	call,
+	bet,
+	raise
 } = require('./gameUtil');
 
 // Logging middleware
@@ -60,8 +63,6 @@ const io = require('socket.io')(server, { pingInterval: 2000, pingTimeout: 5000 
 // server state
 // game state storage
 
-let players = gameState.players;
-
 io.on('connection', (socket) => {
 	console.log('a user connected:', socket.id);
 	socket.emit('clientId', socket.id);
@@ -69,16 +70,33 @@ io.on('connection', (socket) => {
 	if (gameState.players.length > 1) {
 		setInitialBlinds();
 		dealPlayers();
+		io.sockets.emit('sound', 'dealCards')
 	}
 	io.sockets.emit('gameState', gameState);
 
 	socket.on('action', (action) => {
 		if (action.type === 'check') {
 			check(socket.id);
+			io.sockets.emit('sound', 'check')
 		}
 
 		if (action.type === 'fold') {
 			fold(socket.id)
+		}
+
+		if (action.type === 'call') {
+			call(socket.id)
+			io.sockets.emit('sound', 'chips')
+		}
+
+		if (action.type === 'bet') {
+			bet(socket.id)
+			io.sockets.emit('sound', 'chips')
+		}
+
+		if (action.type === 'raise') {
+			raise(socket.id)
+			io.sockets.emit('sound', 'chips')
 		}
 
 		io.sockets.emit('gameState', gameState);
@@ -86,6 +104,7 @@ io.on('connection', (socket) => {
 		// check if all players have completed an action
 		if (playerActionCheck()) {
 			changeBoard();
+			io.sockets.emit('sound', 'dealCards')
 			// send updated state
 			io.sockets.emit('gameState', gameState);
 		}

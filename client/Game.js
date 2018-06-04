@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import Seats from './seats';
 import Actions from './playerActions';
 import Board from './Board';
+import SoundEffects from './SoundEffects';
+import { setTimeout } from 'timers';
 
 let socket;
 const mapStateToProps = (state) => ({ state });
@@ -18,11 +20,16 @@ class Test extends Component {
 			gameState: {
 				players: [],
 				gameDeck: '',
-				board: []
-			}
+				board: [],
+				activeBet: 0
+			},
+			sound: 'none'
 		};
 		this.check = this.check.bind(this);
 		this.fold = this.fold.bind(this);
+		this.call = this.call.bind(this);
+		this.bet = this.bet.bind(this);
+		this.raise = this.raise.bind(this);
 		socket = io.connect();
 		socket.on('clientId', (id) => {
 			this.setState({ id });
@@ -30,7 +37,14 @@ class Test extends Component {
 		socket.on('gameState', (gameState) => {
 			this.setState({ gameState });
 		});
+		socket.on('sound', (soundEffect) => {
+			this.setState({sound: soundEffect})
+			setTimeout(	() => {
+				this.setState({sound: 'none'})
+			}, 500)
+		})
 	}
+
 
 	fold() {
 		const action = { type: 'fold' };
@@ -40,7 +54,21 @@ class Test extends Component {
 	check() {
 		const action = { type: 'check' };
 		socket.emit('action', action);
-		console.log(this.state.gameState);
+	}
+
+	call() {
+		const action = { type: 'call' };
+		socket.emit('action', action);
+	}
+
+	bet() {
+		const action = { type: 'bet' };
+		socket.emit('action', action);
+	}
+
+	raise() {
+		const action = { type: 'raise' };
+		socket.emit('action', action);
 	}
 
 	render() {
@@ -51,11 +79,20 @@ class Test extends Component {
 			<div>
 				<div className="container">
 					<img src="poker_table.svg" />
+					<SoundEffects sound={this.state.sound} />
 					<Seats clientPlayer={clientPlayer} id={id} players={players} />
-					<Actions fold={this.fold} clientPlayer={clientPlayer} check={this.check} />
+					<Actions
+						raise={this.raise}
+						bet={this.bet}
+						call={this.call}
+						fold={this.fold}
+						clientPlayer={clientPlayer}
+						check={this.check}
+						activeBet={this.state.gameState.activeBet}
+					/>
 				</div>
 				<p>Number of players: {players.length} </p>
-				<Board pot={this.state.gameState.pot} board={this.state.gameState.board} />
+				<Board pot={this.state.gameState.pot} players={players} board={this.state.gameState.board} />
 			</div>
 		);
 	}
