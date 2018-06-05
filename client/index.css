@@ -2,8 +2,10 @@
   height: 100%;
   width: 100%;
   margin: 0;
-  background-color: #363b44
+  background-color: ivory
 }
+
+/* #363b44 */
 
 /* demo styles */
 #demo div {
@@ -18,18 +20,35 @@
   align-content: center
 }
 
-/* Make the image responsive */
+
+.lobby-container {
+padding-top: 30px
+}
+
+.lobby {
+width: 50%;
+height: 50%;
+margin: auto
+}
 
 .avatar {
-  height: 70px;
-  width: 70px
+  height: 75px;
+  width: 75px
+}
+
+p {
+  font-size: 0.75vw
 }
 
 .player {
 text-align: center;
 vertical-align: middle;
-padding-top: 20px;
-padding-left: 30px
+height: 100%;
+width: 100%;
+}
+
+.player-font {
+  font-size: 1vw
 }
 
 .table {
@@ -38,11 +57,17 @@ padding-left: 30px
   height: 60%;
 }
 
+.test{
+  background-color: white
+}
+
 div {
   font-size: 16px;
 }
 /* Style the button and place it in the middle of the container/image */
 .seat-1 {
+  height: 10%;
+  width: 25%;
   border-radius: 25px;
   display: flex;
   position: absolute;
@@ -52,13 +77,13 @@ div {
   -ms-transform: translate(-50%, -50%);
   background-color: #26787c;
   color: white;
-  font-size: 16px;
+  font-size: 10px;
   padding: 12px 24px;
-  border: none;
-  cursor: pointer;
 }
 
 .seat-2 {
+  height: 10%;
+  width: 25%;
   border-radius: 25px;
   display: flex;
   position: absolute;
@@ -70,29 +95,42 @@ div {
   color: white;
   font-size: 16px;
   padding: 12px 24px;
-  border: none;
-  cursor: pointer;
 }
 
 .board {
-  width: 35%;
-  height:25%;
-  display: flex;
+  width: 40%;
+  height:10%;
   position: absolute;
-  top: 40%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
   -ms-transform: translate(-50%, -50%);
-  background-color: #555;
+  background-color: none;
   color: white;
   font-size: 16px;
   padding: 12px 24px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
 }
 
+.boardInner {
+  display: flex;
+}
+
+.pot {
+  text-align: left
+}
 .boardCards {
+  margin: 10px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.hiddenBoardCards{
+  margin: 10px;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  visibility: hidden
 }
 
 .seat-4 {

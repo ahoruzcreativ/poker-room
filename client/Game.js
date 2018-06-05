@@ -7,7 +7,9 @@ import Actions from './playerActions';
 import Board from './Board';
 import SoundEffects from './SoundEffects';
 import { setTimeout } from 'timers';
-import Card from './CardImages';
+import Chip from './Chips';
+import Chatbox from './Chatbox';
+import Lobby from './Lobby';
 
 let socket;
 const mapStateToProps = (state) => ({ state });
@@ -18,11 +20,14 @@ class Test extends Component {
 		super(props);
 		this.state = {
 			id: '',
+			name: '',
 			gameState: {
 				players: [],
 				gameDeck: '',
 				board: [],
-				activeBet: 0
+				activeBet: 0,
+				pot: 0,
+				messages: []
 			},
 			sound: 'none'
 		};
@@ -31,6 +36,8 @@ class Test extends Component {
 		this.call = this.call.bind(this);
 		this.bet = this.bet.bind(this);
 		this.raise = this.raise.bind(this);
+		this.messageSubmit = this.messageSubmit.bind(this);
+		this.addName = this.addName.bind(this)
 		socket = io.connect();
 		socket.on('clientId', (id) => {
 			this.setState({ id });
@@ -71,30 +78,44 @@ class Test extends Component {
 		socket.emit('action', action);
 	}
 
+	messageSubmit(message) {
+		socket.emit('message', message);
+	}
+
+	addName(name) {
+		this.setState({name})
+		socket.emit('addName', name)
+	}
+
 	render() {
 		const players = this.state.gameState.players;
 		const id = this.state.id;
 		const clientPlayer = players.filter((player) => player.id === id);
-		return (
-			<div >
-				<div className="container">
-					<img className="table" src="poker_table.svg" />
-					<SoundEffects sound={this.state.sound} />
-					<Seats clientPlayer={clientPlayer} id={id} players={players} />
-					<Actions
-						raise={this.raise}
-						bet={this.bet}
-						call={this.call}
-						fold={this.fold}
-						clientPlayer={clientPlayer}
-						check={this.check}
-						activeBet={this.state.gameState.activeBet}
-					/>
+
+		if (this.state.name === '') {
+			return <Lobby addName={this.addName}/>;
+		} else {
+			return (
+				<div>
+					<div className="container">
+						<img className="table" src="poker_table.svg" />
+						<SoundEffects sound={this.state.sound} />
+						<Seats clientPlayer={clientPlayer} id={id} players={players} />
+						<Actions
+							raise={this.raise}
+							bet={this.bet}
+							call={this.call}
+							fold={this.fold}
+							clientPlayer={clientPlayer}
+							check={this.check}
+							activeBet={this.state.gameState.activeBet}
+						/>
+						<Board pot={this.state.gameState.pot} players={players} board={this.state.gameState.board} />
+					</div>
+					<Chatbox messages={this.state.gameState.messages} messageSubmit={this.messageSubmit} />
 				</div>
-				<p>Number of players: {players.length} </p>
-				<Board pot={this.state.gameState.pot} players={players} board={this.state.gameState.board} />
-			</div>
-		);
+			);
+		}
 	}
 }
 

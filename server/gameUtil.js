@@ -10,12 +10,14 @@ const gameState = {
 	pot: 0,
 	bigBlindValue: 10,
 	smallBlindValue: 5,
-	activeBet: 0
+	activeBet: 0,
+	messages: []
 };
 
 const addPlayer = (socketId) => {
 	gameState.players.push({
 		id: socketId,
+		name: '',
 		bankroll: 1000,
 		cards: [],
 		action: false,
@@ -281,6 +283,16 @@ const raise = (socketId) => {
 	check(socketId);
 };
 
+const addMessage = (message, socketId) => {
+	const name = gameState.players.filter((player) => player.id === socketId)[0].name
+	gameState.messages.push({text: message, author: name})
+}
+
+const addName = (name, socketId) => {
+	const changePlayer = gameState.players.filter((player) => player.id === socketId)[0];
+	changePlayer.name = name
+}
+
 module.exports = {
 	gameState,
 	addPlayer,
@@ -295,5 +307,7 @@ module.exports = {
 	determineWinner,
 	call,
 	bet,
-	raise
+	raise,
+	addMessage,
+	addName
 };

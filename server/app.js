@@ -17,7 +17,9 @@ const {
 	fold,
 	call,
 	bet,
-	raise
+	raise,
+	addMessage,
+	addName
 } = require('./gameUtil');
 
 // Logging middleware
@@ -70,33 +72,33 @@ io.on('connection', (socket) => {
 	if (gameState.players.length > 1) {
 		setInitialBlinds();
 		dealPlayers();
-		io.sockets.emit('sound', 'dealCards')
+		io.sockets.emit('sound', 'dealCards');
 	}
 	io.sockets.emit('gameState', gameState);
 
 	socket.on('action', (action) => {
 		if (action.type === 'check') {
 			check(socket.id);
-			io.sockets.emit('sound', 'check')
+			io.sockets.emit('sound', 'check');
 		}
 
 		if (action.type === 'fold') {
-			fold(socket.id)
+			fold(socket.id);
 		}
 
 		if (action.type === 'call') {
-			call(socket.id)
-			io.sockets.emit('sound', 'chips')
+			call(socket.id);
+			io.sockets.emit('sound', 'chips');
 		}
 
 		if (action.type === 'bet') {
-			bet(socket.id)
-			io.sockets.emit('sound', 'chips')
+			bet(socket.id);
+			io.sockets.emit('sound', 'chips');
 		}
 
 		if (action.type === 'raise') {
-			raise(socket.id)
-			io.sockets.emit('sound', 'chips')
+			raise(socket.id);
+			io.sockets.emit('sound', 'chips');
 		}
 
 		io.sockets.emit('gameState', gameState);
@@ -104,11 +106,23 @@ io.on('connection', (socket) => {
 		// check if all players have completed an action
 		if (playerActionCheck()) {
 			changeBoard();
-			io.sockets.emit('sound', 'dealCards')
+			io.sockets.emit('sound', 'dealCards');
 			// send updated state
 			io.sockets.emit('gameState', gameState);
 		}
 	});
+
+	socket.on('message', (message) => {
+		addMessage(message, socket.id);
+
+		// send updated state
+		io.sockets.emit('gameState', gameState);
+	});
+
+	socket.on('addName', (name) => {
+		addName(name, socket.id)
+		io.sockets.emit('gameState', gameState);
+	})
 
 	socket.on('disconnect', () => {
 		console.log('player has disconnected', socket.id);
