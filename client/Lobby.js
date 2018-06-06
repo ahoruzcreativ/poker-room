@@ -59,11 +59,14 @@ class Lobby extends Component {
 					</div>
 				</Paper>
 				<Dialog open={this.state.open} onClose={this.handleClose}>
-					<DialogTitle >What is your name?</DialogTitle>
+					<DialogTitle >	<Typography align="center" variant="subheading" gutterBottom>
+							Please enter your name:
+						</Typography></DialogTitle>
 					<DialogContent>
      <TextField
           margin="normal"
           onChange={this.handleChange}
+          style={{width: '100%'}}
         />
 					</DialogContent>
 					<DialogActions>

@@ -19,7 +19,8 @@ const {
 	bet,
 	raise,
 	addMessage,
-	addName
+	addName,
+	addSpectators
 } = require('./gameUtil');
 
 // Logging middleware
@@ -68,12 +69,18 @@ const io = require('socket.io')(server, { pingInterval: 2000, pingTimeout: 5000 
 io.on('connection', (socket) => {
 	console.log('a user connected:', socket.id);
 	socket.emit('clientId', socket.id);
-	addPlayer(socket.id);
-	if (gameState.players.length > 1) {
-		setInitialBlinds();
-		dealPlayers();
-		io.sockets.emit('sound', 'dealCards');
-	}
+	
+	addSpectators(socket.id)
+
+	socket.on('join', () => {
+		addPlayer(socket.id);
+		if (gameState.players.length > 1) {
+			setInitialBlinds();
+			dealPlayers();
+			io.sockets.emit('sound', 'dealCards');
+		}
+		io.sockets.emit('gameState', gameState);
+	})
 	io.sockets.emit('gameState', gameState);
 
 	socket.on('action', (action) => {

@@ -10,6 +10,7 @@ import { setTimeout } from 'timers';
 import Chip from './Chips';
 import Chatbox from './Chatbox';
 import Lobby from './Lobby';
+import Join from './buttons/Join'
 
 let socket;
 const mapStateToProps = (state) => ({ state });
@@ -29,7 +30,8 @@ class Test extends Component {
 				pot: 0,
 				messages: []
 			},
-			sound: 'none'
+			sound: 'none',
+			joined: false
 		};
 		this.check = this.check.bind(this);
 		this.fold = this.fold.bind(this);
@@ -38,6 +40,7 @@ class Test extends Component {
 		this.raise = this.raise.bind(this);
 		this.messageSubmit = this.messageSubmit.bind(this);
 		this.addName = this.addName.bind(this)
+		this.join = this.join.bind(this)
 		socket = io.connect();
 		socket.on('clientId', (id) => {
 			this.setState({ id });
@@ -87,6 +90,11 @@ class Test extends Component {
 		socket.emit('addName', name)
 	}
 
+	join() {
+		socket.emit('join')
+		this.setState({joined: true})
+	}
+
 	render() {
 		const players = this.state.gameState.players;
 		const id = this.state.id;
@@ -113,6 +121,7 @@ class Test extends Component {
 						<Board pot={this.state.gameState.pot} players={players} board={this.state.gameState.board} />
 					</div>
 					<Chatbox messages={this.state.gameState.messages} messageSubmit={this.messageSubmit} />
+					<Join joined={this.state.joined} players={this.state.gameState.players} join={this.join} />
 				</div>
 			);
 		}

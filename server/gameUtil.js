@@ -4,6 +4,7 @@ const Ranker = require('handranker');
 const gameDeck = new Deck();
 const gameState = {
 	players: [],
+	spectators: [],
 	gameDeck,
 	action: false,
 	board: [],
@@ -14,8 +15,8 @@ const gameState = {
 	messages: []
 };
 
-const addPlayer = (socketId) => {
-	gameState.players.push({
+const addSpectators = (socketId) => {
+	gameState.spectators.push({
 		id: socketId,
 		name: '',
 		bankroll: 1000,
@@ -27,6 +28,12 @@ const addPlayer = (socketId) => {
 		active: false,
 		activeBet: 0
 	});
+};
+
+const addPlayer = (socketId) => {
+	const newPlayer = gameState.spectators.filter((player) => player.id === socketId)[0];
+	gameState.players.push(newPlayer);
+	gameState.spectators = gameState.spectators.filter((player) => player.id !== socketId);
 };
 
 const dealPlayers = () => {
@@ -204,9 +211,9 @@ const changeBoard = () => {
 
 const removePlayer = (socketId) => {
 	gameState.players = gameState.players.filter((player) => player.id !== socketId);
-
+	gameState.spectators = gameState.spectators.filter((player) => player.id !== socketId);
 	// give pot to remaining player
-	gameState.players.forEach(player => potToPlayer(player))
+	gameState.players.forEach((player) => potToPlayer(player));
 };
 
 const fold = (socketId) => {
@@ -284,14 +291,25 @@ const raise = (socketId) => {
 };
 
 const addMessage = (message, socketId) => {
-	const name = gameState.players.filter((player) => player.id === socketId)[0].name
-	gameState.messages.push({text: message, author: name})
-}
+	// find if player is active or a spectator
+	const activePlayer = gameState.players.filter((player) => player.id === socketId);
+	const spectatorPlayer = gameState.spectators.filter((player) => player.id === socketId);
+
+	let name = '';
+
+	if (activePlayer.length > 0) {
+		name = activePlayer[0].name;
+	} else if (spectatorPlayer.length > 0) {
+		name = spectatorPlayer[0].name;
+	}
+
+	gameState.messages.push({ text: message, author: name });
+};
 
 const addName = (name, socketId) => {
-	const changePlayer = gameState.players.filter((player) => player.id === socketId)[0];
-	changePlayer.name = name
-}
+	const changePlayer = gameState.spectators.filter((player) => player.id === socketId)[0];
+	changePlayer.name = name;
+};
 
 module.exports = {
 	gameState,
@@ -309,5 +327,6 @@ module.exports = {
 	bet,
 	raise,
 	addMessage,
-	addName
+	addName,
+	addSpectators
 };
