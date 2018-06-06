@@ -12,7 +12,8 @@ const gameState = {
 	bigBlindValue: 10,
 	smallBlindValue: 5,
 	activeBet: 0,
-	messages: []
+	messages: [],
+	showdown: false
 };
 
 const addSpectators = (socketId) => {
@@ -107,11 +108,6 @@ const check = (socketId) => {
 	for (let i = 0; i < gameState.players.length; i++) {
 		if (gameState.players[i].id === socketId) {
 			gameState.players[i].action = true;
-			// const lastActivePlayer =
-			// 	gameState.players.map((player) => player.action).filter((action) => action === false).length < 1;
-
-			// edge case for preflop player order, BB needs to switch to first to act after preflop
-			// if (!(lastActivePlayer && gameState.action === 'preflop')) {
 			if (i + 1 < gameState.players.length) {
 				gameState.players[i + 1].active = true;
 				gameState.players[i].active = false;
@@ -119,7 +115,6 @@ const check = (socketId) => {
 				gameState.players[0].active = true;
 				gameState.players[i].active = false;
 			}
-			// }
 		}
 	}
 };
@@ -159,18 +154,18 @@ const potToTie = () => {
 const determineWinner = () => {
 	const hands = gameState.players;
 	const board = gameState.board;
-	console.log('hands', hands);
-	console.log('board', board);
+
 	const results = Ranker.orderHands(hands, board);
-	console.log('results', results);
 	// check for tie
 	if (results[0].length > 1) {
 		potToTie();
+		const tieMsg = 'Tie pot, both players have ' + results[0][0].description;
+		gameState.messages.push({ text: tieMsg, author: 'Game' });
 	} else {
 		const winnerId = results[0][0].id;
-		console.log('winnerId', winnerId);
 		const winner = gameState.players.filter((player) => player.id === winnerId)[0];
-		console.log('winner', winner);
+		const winnerMsg = winner.name + ' won $' + gameState.pot + ' with ' + results[0][0].description;
+		gameState.messages.push({ text: winnerMsg, author: 'Game' });
 		potToPlayer(winner);
 	}
 };
@@ -203,9 +198,10 @@ const changeBoard = () => {
 		gameState.gameDeck.dealCards(1).forEach((card) => gameState.board.push(card));
 	} else if (gameState.action === 'river') {
 		determineWinner();
-		dealPlayers();
-		resetPlayerAction();
-		moveBlinds();
+		gameState.showdown = true
+		// dealPlayers();
+		// resetPlayerAction();
+		// moveBlinds();
 	}
 };
 
@@ -328,5 +324,6 @@ module.exports = {
 	raise,
 	addMessage,
 	addName,
-	addSpectators
+	addSpectators,
+	resetPlayerAction
 };

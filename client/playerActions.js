@@ -3,6 +3,7 @@ import Bet from './buttons/Bet';
 import Raise from './buttons/Raise'
 
 const Actions = (props) => {
+	const showdown = props.showdown
 	const clientPlayer = props.clientPlayer;
 	const activeBet = props.activeBet;
 console.log('game activeBet', activeBet) 
@@ -10,7 +11,7 @@ console.log(clientPlayer)
 	return (
 		<div>
 			{clientPlayer.map((player) => {
-				if (player.active && activeBet <= player.activeBet) {
+				if (player.active && activeBet <= player.activeBet && showdown === false) {
 					return (
 						<div key={player.id}>
 							<Bet bet={props.bet} activeBet={activeBet} />
@@ -19,7 +20,7 @@ console.log(clientPlayer)
 							<button onClick={props.fold}>Fold</button>
 						</div>
 					);
-				} else if (player.active && activeBet > player.activeBet) {
+				} else if (player.active && activeBet > player.activeBet && showdown === false) {
 					return (
 						<div key={player.id}>
 						<Bet bet={props.bet} activeBet={activeBet} />

@@ -10,7 +10,9 @@ import { setTimeout } from 'timers';
 import Chip from './Chips';
 import Chatbox from './Chatbox';
 import Lobby from './Lobby';
-import Join from './buttons/Join'
+import Join from './buttons/Join';
+import PlayerCards from './playerCards';
+import OpponentCards from './opponentCards';
 
 let socket;
 const mapStateToProps = (state) => ({ state });
@@ -28,7 +30,8 @@ class Test extends Component {
 				board: [],
 				activeBet: 0,
 				pot: 0,
-				messages: []
+				messages: [],
+				showdown: false
 			},
 			sound: 'none',
 			joined: false
@@ -39,8 +42,8 @@ class Test extends Component {
 		this.bet = this.bet.bind(this);
 		this.raise = this.raise.bind(this);
 		this.messageSubmit = this.messageSubmit.bind(this);
-		this.addName = this.addName.bind(this)
-		this.join = this.join.bind(this)
+		this.addName = this.addName.bind(this);
+		this.join = this.join.bind(this);
 		socket = io.connect();
 		socket.on('clientId', (id) => {
 			this.setState({ id });
@@ -86,13 +89,13 @@ class Test extends Component {
 	}
 
 	addName(name) {
-		this.setState({name})
-		socket.emit('addName', name)
+		this.setState({ name });
+		socket.emit('addName', name);
 	}
 
 	join() {
-		socket.emit('join')
-		this.setState({joined: true})
+		socket.emit('join');
+		this.setState({ joined: true });
 	}
 
 	render() {
@@ -101,7 +104,7 @@ class Test extends Component {
 		const clientPlayer = players.filter((player) => player.id === id);
 
 		if (this.state.name === '') {
-			return <Lobby addName={this.addName}/>;
+			return <Lobby addName={this.addName} />;
 		} else {
 			return (
 				<div>
@@ -110,6 +113,7 @@ class Test extends Component {
 						<SoundEffects sound={this.state.sound} />
 						<Seats clientPlayer={clientPlayer} id={id} players={players} />
 						<Actions
+							showdown={this.state.gameState.showdown}
 							raise={this.raise}
 							bet={this.bet}
 							call={this.call}
@@ -119,6 +123,8 @@ class Test extends Component {
 							activeBet={this.state.gameState.activeBet}
 						/>
 						<Board pot={this.state.gameState.pot} players={players} board={this.state.gameState.board} />
+						<PlayerCards players={this.state.gameState.players} id={this.state.id} />
+						<OpponentCards showdown={this.state.gameState.showdown} players={this.state.gameState.players} id={this.state.id} />
 					</div>
 					<Chatbox messages={this.state.gameState.messages} messageSubmit={this.messageSubmit} />
 					<Join joined={this.state.joined} players={this.state.gameState.players} join={this.join} />

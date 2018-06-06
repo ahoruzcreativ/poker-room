@@ -20,7 +20,9 @@ const {
 	raise,
 	addMessage,
 	addName,
-	addSpectators
+	addSpectators,
+	resetPlayerAction,
+	moveBlinds
 } = require('./gameUtil');
 
 // Logging middleware
@@ -69,8 +71,8 @@ const io = require('socket.io')(server, { pingInterval: 2000, pingTimeout: 5000 
 io.on('connection', (socket) => {
 	console.log('a user connected:', socket.id);
 	socket.emit('clientId', socket.id);
-	
-	addSpectators(socket.id)
+
+	addSpectators(socket.id);
 
 	socket.on('join', () => {
 		addPlayer(socket.id);
@@ -80,7 +82,7 @@ io.on('connection', (socket) => {
 			io.sockets.emit('sound', 'dealCards');
 		}
 		io.sockets.emit('gameState', gameState);
-	})
+	});
 	io.sockets.emit('gameState', gameState);
 
 	socket.on('action', (action) => {
@@ -116,6 +118,16 @@ io.on('connection', (socket) => {
 			io.sockets.emit('sound', 'dealCards');
 			// send updated state
 			io.sockets.emit('gameState', gameState);
+			if (gameState.showdown === true) {
+				setTimeout(() => {
+					console.log('is set timeout running?')
+					dealPlayers();
+					resetPlayerAction();
+					moveBlinds();
+					gameState.showdown = false
+					io.sockets.emit('gameState', gameState);
+				}, 2500);
+			}
 		}
 	});
 
@@ -127,9 +139,9 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('addName', (name) => {
-		addName(name, socket.id)
+		addName(name, socket.id);
 		io.sockets.emit('gameState', gameState);
-	})
+	});
 
 	socket.on('disconnect', () => {
 		console.log('player has disconnected', socket.id);
