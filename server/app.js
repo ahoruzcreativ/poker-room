@@ -22,7 +22,8 @@ const {
 	addName,
 	addSpectators,
 	resetPlayerAction,
-	moveBlinds
+	moveBlinds,
+	determineWinner
 } = require('./gameUtil');
 
 // Logging middleware
@@ -120,11 +121,11 @@ io.on('connection', (socket) => {
 			io.sockets.emit('gameState', gameState);
 			if (gameState.showdown === true) {
 				setTimeout(() => {
-					console.log('is set timeout running?')
+					determineWinner();
 					dealPlayers();
 					resetPlayerAction();
 					moveBlinds();
-					gameState.showdown = false
+					gameState.showdown = false;
 					io.sockets.emit('gameState', gameState);
 				}, 2500);
 			}

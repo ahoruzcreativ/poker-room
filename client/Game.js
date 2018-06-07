@@ -25,6 +25,7 @@ class Test extends Component {
 			id: '',
 			name: '',
 			gameState: {
+				spectators: [],
 				players: [],
 				gameDeck: '',
 				board: [],
@@ -104,7 +105,7 @@ class Test extends Component {
 		const id = this.state.id;
 		const clientPlayer = players.filter((player) => player.id === id);
 		if (this.state.name === '') {
-			return <Lobby addName={this.addName} />;
+			return <Lobby players={players} spectators={this.state.gameState.spectators} addName={this.addName} />;
 		} else {
 			return (
 				<div>
@@ -125,6 +126,7 @@ class Test extends Component {
 						<Board pot={this.state.gameState.pot} players={players} board={this.state.gameState.board} />
 						<PlayerCards players={this.state.gameState.players} id={this.state.id} />
 						<OpponentCards spectator={this.state.spectator} showdown={this.state.gameState.showdown} players={this.state.gameState.players} id={this.state.id} />
+						<Chip spectator={this.state.spectator} players={this.state.gameState.players} id={this.state.id} />
 					</div>
 					<Chatbox messages={this.state.gameState.messages} messageSubmit={this.messageSubmit} />
 					<Join joined={this.state.joined} players={this.state.gameState.players} join={this.join} />

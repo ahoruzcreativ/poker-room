@@ -1,50 +1,58 @@
 import React from 'react';
 
 const Chip = (props) => {
- const bet = props.bet;
-	if (bet === 0) {
-		return <div />;
-	} else if (bet > 0 && bet < 16) {
+	const spectator = props.spectator;
+	const id = props.id;
+	const players = props.players;
+	if (!spectator) {
 		return (
 			<div>
-    <img  src="/chips/chip.png" />
+				{players.map((player) => {
+					if (player.activeBet === 0) {
+						return <div />;
+					} else if (player.id === id) {
+						return (
+							<div className="chip-1">
+								<div style={{ marginRight: '5px' }}>${player.activeBet}</div>
+								<img className="chipImg" src="/chips/chip.png" />
+							</div>
+						);
+					} else if (player.id !== id) {
+						return (
+							<div className="chip-2">
+								<div style={{ marginRight: '5px' }}>${player.activeBet}</div>
+								<img className="chipImg" src="/chips/chip.png" />
+							</div>
+						);
+					}
+				})}
 			</div>
 		);
-	} else if (bet > 15 && bet < 50) {
+	} else {
 		return (
 			<div>
-			   <img  src="/chips/chip.png" />
-      <img  src="/chips/chip.png" />
-			</div>
-		);
-	} else if (bet > 49 && bet < 200) {
-		return (
-			<div>
-	  <img  src="/chips/chip.png" />
-   <img  src="/chips/chip.png" />
-   <img  src="/chips/chip.png" />
-			</div>
-		);
-	} else if (bet > 199 && bet < 500) {
-		return (
-			<div>
-	  <img  src="/chips/chip.png" />
-   <img  src="/chips/chip.png" />
-   <img  src="/chips/chip.png" />
-   <img  src="/chips/chip.png" />
-			</div>
-		);
-	} else if (bet > 499 && bet < 3000) {
-		return (
-			<div>
-	  <img  src="/chips/chip.png" />
-   <img  src="/chips/chip.png" />
-   <img  src="/chips/chip.png" />
-   <img  src="/chips/chip.png" />
-   <img  src="/chips/chip.png" />
+				{players.map((player) => {
+					if (player.activeBet === 0) {
+						return <div />;
+					} else if (players.indexOf(player) === 0) {
+						return (
+							<div className="chip-1">
+								<div style={{ marginRight: '5px' }}>${player.activeBet}</div>
+								<img className="chipImg" src="/chips/chip.png" />
+							</div>
+						);
+					} else if (players.indexOf(player) === 1) {
+						return (
+							<div className="chip-2">
+								<div style={{ marginRight: '5px' }}>${player.activeBet}</div>
+								<img className="chipImg" src="/chips/chip.png" />
+							</div>
+						);
+					}
+				})}
 			</div>
 		);
 	}
 };
 
-export default Chip
+export default Chip;

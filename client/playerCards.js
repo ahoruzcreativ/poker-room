@@ -5,8 +5,6 @@ const PlayerCards = (props) => {
 	const id = props.id;
 
 	const clientPlayer = players.filter((player) => player.id === id);
-	const otherPlayer = players.filter((player) => player.id !== id);
-console.log(clientPlayer, 'client player')
 	return (
 			<div className="playerBoard">
 				{clientPlayer.map((player) => {

@@ -2,7 +2,7 @@
   height: 100%;
   width: 100%;
   margin: 0;
-  background-color: ivory
+  background-color: whitesmoke
 }
 
 /* #363b44 */
@@ -64,6 +64,46 @@ width: 100%;
 
 div {
   font-size: 16px;
+}
+
+.chipImg {
+  width: 50%;
+  height: 100%;
+}
+
+.chipImgBoard {
+  width: 8%;
+  height: 16%
+}
+
+.chip-2 {
+  height: 10%;
+  width: 10%;
+  border-radius: 25px;
+  display: flex;
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  color: white;
+  font-size: 10px;
+  padding: 12px 24px;
+}
+
+.chip-1 {
+  height: 10%;
+  width: 10%;
+  border-radius: 25px;
+  display: flex;
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  color: white;
+  font-size: 10px;
+  padding: 12px 24px;
 }
 /* Style the button and place it in the middle of the container/image */
 .seat-1 {

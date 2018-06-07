@@ -32,7 +32,6 @@ const OpponentCards = (props) => {
 			</div>
 		); // spectator view
 	} else {
-  console.log('we are in spectator view!!')
 		return (
 			<div>
 				<div className="opponentBoard">

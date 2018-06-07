@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Board = (props) => {
-	const pot = props.pot;
+	const pot = [ props.pot ];
 	const board = props.board;
 	while (board.length < 5) {
 		board.push('empty');
@@ -17,7 +17,19 @@ const Board = (props) => {
 					}
 				})}
 			</div>
-			<div className="pot">${pot}</div>
+			<div className="pot">
+				{pot.map((p) => {
+					if (p === 0) {
+						return <div />;
+					} else {
+						return (
+							<div>
+								${p} <img className="chipImgBoard" src="/chips/chip.png" />
+							</div>
+						);
+					}
+				})}
+			</div>
 		</div>
 	);
 };

@@ -197,7 +197,7 @@ const changeBoard = () => {
 		resetPlayerAction();
 		gameState.gameDeck.dealCards(1).forEach((card) => gameState.board.push(card));
 	} else if (gameState.action === 'river') {
-		determineWinner();
+		// determineWinner();
 		gameState.showdown = true
 		// dealPlayers();
 		// resetPlayerAction();
@@ -205,11 +205,24 @@ const changeBoard = () => {
 	}
 };
 
+const resetGame = () => {
+	gameState.board = [];
+	gameState.messages = [];
+	gameState.players.forEach((player) => {
+		player.cards = [];
+		player.activeBets = [];	
+	});
+}
+
 const removePlayer = (socketId) => {
+	const oldPlayers = gameState.players.length
 	gameState.players = gameState.players.filter((player) => player.id !== socketId);
+	if (gameState.players.length !== oldPlayers) {
+		resetGame()
+		// give pot to remaining player
+		gameState.players.forEach((player) => potToPlayer(player));
+	}
 	gameState.spectators = gameState.spectators.filter((player) => player.id !== socketId);
-	// give pot to remaining player
-	gameState.players.forEach((player) => potToPlayer(player));
 };
 
 const fold = (socketId) => {
@@ -296,7 +309,7 @@ const addMessage = (message, socketId) => {
 	if (activePlayer.length > 0) {
 		name = activePlayer[0].name;
 	} else if (spectatorPlayer.length > 0) {
-		name = spectatorPlayer[0].name;
+		name = '(Spectator) ' + spectatorPlayer[0].name;
 	}
 
 	gameState.messages.push({ text: message, author: name });
@@ -306,6 +319,7 @@ const addName = (name, socketId) => {
 	const changePlayer = gameState.spectators.filter((player) => player.id === socketId)[0];
 	changePlayer.name = name;
 };
+
 
 module.exports = {
 	gameState,

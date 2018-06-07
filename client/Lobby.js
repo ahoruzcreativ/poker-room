@@ -34,7 +34,7 @@ class Lobby extends Component {
 	render() {
 		return (
 			<div className="lobby-container">
-				<Paper className="lobby" elevation={4}>
+				<Paper className="lobby" elevation={8}>
 					<div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '50px' }}>
 						<Typography align="center" variant="headline" gutterBottom>
 							Welcome to Jason's Poker Room
@@ -52,6 +52,12 @@ class Lobby extends Component {
 						}}
 						src="splash.png"
 					/>
+					<Typography style={{ marginTop: '50px' }} align="center" variant="subheading" gutterBottom>
+							Active players: {this.props.players.length}
+						</Typography>
+						<Typography align="center" variant="subheading" gutterBottom>
+							Spectators: {this.props.spectators.length}
+						</Typography>
 					<div style={{ textAlign: 'center', marginTop: '50px', marginBottom: '50px' }}>
 						<Button onClick={this.handleClickOpen} variant="contained" color="secondary">
 							Join Room
