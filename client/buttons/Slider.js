@@ -10,8 +10,6 @@ class BetSlider extends Component {
    }
  }
 
-
-
  handleChangeStart = () => {
    console.log('Change event started')
  };

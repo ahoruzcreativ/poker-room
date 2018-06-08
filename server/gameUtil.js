@@ -14,7 +14,8 @@ const gameState = {
 	activeBet: 0,
 	messages: [],
 	showdown: false,
-	minBet: 20
+	minBet: 20,
+	allIn: false
 };
 
 const addSpectators = (socketId) => {
@@ -171,6 +172,14 @@ const determineWinner = () => {
 	}
 };
 
+const determineLose = () => {
+		for (let i = 0; i < gameState.players.length; i++) {
+			if (gameState.players[i].bankroll <= 0) {
+				return true
+			}
+		}
+}
+
 const resetActive = () => {
 	gameState.players.forEach((player) => {
 		if (player.bigBlind) {
@@ -237,7 +246,27 @@ const fold = (socketId) => {
 	dealPlayers();
 	resetPlayerAction();
 	moveBlinds();
+
+	gameState.minBet = 20
 };
+
+const allInMode = () => {
+	
+	if (gameState.allIn === true) {
+
+		// deal out remaining cards
+		if (gameState.action === 'preflop') {
+			gameState.gameDeck.dealCards(5).forEach((card) => gameState.board.push(card));
+		} else if (gameState.action === 'flop') {
+			gameState.gameDeck.dealCards(2).forEach((card) => gameState.board.push(card));
+		} else if (gameState.action === 'turn') {
+			gameState.gameDeck.dealCards(1).forEach((card) => gameState.board.push(card));
+		}
+		// go straight to showdown
+		gameState.action = 'river'
+	}
+}
+
 
 const call = (socketId) => {
 	const callingPlayer = gameState.players.filter((player) => player.id === socketId)[0];
@@ -250,6 +279,10 @@ const call = (socketId) => {
 	// subtract from player stack
 	callingPlayer.bankroll -= callAmount;
 
+	// check to see if player is all in
+if (callingPlayer.bankroll <= 0) {
+	gameState.allIn = true
+}
 	// use check function to move to next player
 	check(socketId);
 };
@@ -272,6 +305,11 @@ gameState.minBet = betAmount * 2 + gameState.activeBet
 
 	//subtract from player stack
 	bettingPlayer.bankroll -= betAmount;
+
+	// check to see if player is all in
+if (bettingPlayer.bankroll <= 0) {
+	gameState.allIn = true
+}
 
 	// reset action
 	gameState.players.forEach((player) => {
@@ -300,6 +338,12 @@ console.log('raise difference', raiseDifference)
 
 	//subtract from player stack
 	raisingPlayer.bankroll -= raiseDifference;
+
+		// check to see if player is all in
+if (raisingPlayer.bankroll <= 0) {
+	gameState.allIn = true
+}
+
 
 	raisingPlayer.activeBet = gameState.minBet
 	// adjust game active bet
@@ -339,6 +383,8 @@ const addName = (name, socketId) => {
 };
 
 
+
+
 module.exports = {
 	gameState,
 	addPlayer,
@@ -357,5 +403,7 @@ module.exports = {
 	addMessage,
 	addName,
 	addSpectators,
-	resetPlayerAction
+	resetPlayerAction,
+	determineLose,
+	allInMode
 };

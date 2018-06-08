@@ -23,7 +23,9 @@ const {
 	addSpectators,
 	resetPlayerAction,
 	moveBlinds,
-	determineWinner
+	determineWinner,
+	determineLose,
+	allInMode
 } = require('./gameUtil');
 
 // Logging middleware
@@ -115,6 +117,7 @@ io.on('connection', (socket) => {
 
 		// check if all players have completed an action
 		if (playerActionCheck()) {
+			allInMode()
 			changeBoard();
 			io.sockets.emit('sound', 'dealCards');
 			// send updated state
@@ -125,6 +128,9 @@ io.on('connection', (socket) => {
 					dealPlayers();
 					resetPlayerAction();
 					moveBlinds();
+					if (determineLose()) {
+						console.log('someone LOST!')
+					}
 					gameState.minBet = 20
 					gameState.showdown = false;
 					io.sockets.emit('gameState', gameState)
