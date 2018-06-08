@@ -8,7 +8,7 @@ props.player.forEach(player => playerActiveBet+= player.activeBet)
 	if (props.activeBet > 0) {
 		return (
 			<Button variant="contained" color="primary" onClick={props.raise}>
-				Raise ${props.activeBet + 100}
+				Raise ${props.betAmount}
 			</Button>
 		);
 	} else {

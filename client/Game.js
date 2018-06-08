@@ -37,7 +37,7 @@ class Test extends Component {
 			sound: 'none',
 			joined: false,
 			spectator: true,
-			betAmount: 0
+			betAmount: 10,
 		};
 		this.check = this.check.bind(this);
 		this.fold = this.fold.bind(this);
@@ -53,7 +53,7 @@ class Test extends Component {
 			this.setState({ id });
 		});
 		socket.on('gameState', (gameState) => {
-			this.setState({ gameState });
+			this.setState({ gameState, betAmount: gameState.minBet });
 		});
 		socket.on('sound', (soundEffect) => {
 			this.setState({ sound: soundEffect });
@@ -81,7 +81,6 @@ class Test extends Component {
 	bet() {
 		const action = { type: 'bet', amount: this.state.betAmount };
 		socket.emit('action', action);
-
 		//clear bet after player action
 		this.setState({ betAmount: 0 });
 	}
@@ -91,7 +90,7 @@ class Test extends Component {
 	}
 
 	raise() {
-		const action = { type: 'raise' };
+		const action = { type: 'raise', amount: this.state.betAmount };
 		socket.emit('action', action);
 	}
 
@@ -116,6 +115,7 @@ class Test extends Component {
 		if (this.state.name === '') {
 			return <Lobby players={players} spectators={this.state.gameState.spectators} addName={this.addName} />;
 		} else {
+			console.log('minBet', this.state.gameState.minBet)
 			return (
 				<div>
 					<div className="container">
@@ -137,6 +137,7 @@ class Test extends Component {
 						/>
 					</div>
 					<Actions
+					minBet={this.state.gameState.minBet}
 						betAmount={this.state.betAmount}
 						changeBet={this.changeBet}
 						showdown={this.state.gameState.showdown}

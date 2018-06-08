@@ -107,7 +107,7 @@ io.on('connection', (socket) => {
 		}
 
 		if (action.type === 'raise') {
-			raise(socket.id);
+			raise(socket.id, action.amount);
 			io.sockets.emit('sound', 'chips');
 		}
 
@@ -125,6 +125,7 @@ io.on('connection', (socket) => {
 					dealPlayers();
 					resetPlayerAction();
 					moveBlinds();
+					gameState.minBet = 20
 					gameState.showdown = false;
 					io.sockets.emit('gameState', gameState)
 					io.sockets.emit('sound', 'dealCards');

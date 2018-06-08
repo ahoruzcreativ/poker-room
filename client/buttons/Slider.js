@@ -6,13 +6,16 @@ class BetSlider extends Component {
  constructor (props, context) {
    super(props, context)
    this.state = {
-     value: 10
+     value: this.props.minBet
    }
  }
+
+
 
  handleChangeStart = () => {
    console.log('Change event started')
  };
+
 
  handleChange = value => {
    this.setState({
@@ -23,6 +26,7 @@ class BetSlider extends Component {
 
  handleChangeComplete = () => {
    console.log('Change event completed')
+   this.props.changeBet(this.state.value)
  };
 
  render () {
@@ -30,7 +34,7 @@ class BetSlider extends Component {
    return (
      <div className="bet-slider">
        <Slider
-         min={0}
+         min={this.props.minBet}
          max={this.props.bankroll}
          value={value}
          onChangeStart={this.handleChangeStart}

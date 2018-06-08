@@ -13,7 +13,8 @@ const gameState = {
 	smallBlindValue: 5,
 	activeBet: 0,
 	messages: [],
-	showdown: false
+	showdown: false,
+	minBet: 20
 };
 
 const addSpectators = (socketId) => {
@@ -185,16 +186,19 @@ const changeBoard = () => {
 		gameState.action = 'flop';
 		resetActive();
 		resetPlayerAction();
+		gameState.minBet = 10
 		gameState.gameDeck.dealCards(3).forEach((card) => gameState.board.push(card));
 	} else if (gameState.action === 'flop') {
 		gameState.action = 'turn';
 		resetActive();
 		resetPlayerAction();
+		gameState.minBet = 10
 		gameState.gameDeck.dealCards(1).forEach((card) => gameState.board.push(card));
-	} else if (gameState.action === 'turn') {
+	} else if (gameState.action === 'turn') {	
 		gameState.action = 'river';
 		resetActive();
 		resetPlayerAction();
+		gameState.minBet = 10
 		gameState.gameDeck.dealCards(1).forEach((card) => gameState.board.push(card));
 	} else if (gameState.action === 'river') {
 		// determineWinner();
@@ -208,6 +212,7 @@ const changeBoard = () => {
 const resetGame = () => {
 	gameState.board = [];
 	gameState.messages = [];
+	gameState.minBet = 20
 	gameState.players.forEach((player) => {
 		player.cards = [];
 		player.activeBet = 0;
@@ -255,6 +260,9 @@ const bet = (socketId, actionAmount) => {
 	// currently static for now
 	const betAmount = actionAmount;
 
+	// adjust minimum raise
+gameState.minBet = betAmount * 2 + gameState.activeBet
+
 	// add to pot bet amount
 	gameState.pot += betAmount;
 	bettingPlayer.activeBet += betAmount;
@@ -269,28 +277,37 @@ const bet = (socketId, actionAmount) => {
 	gameState.players.forEach((player) => {
 		player.action = false;
 	});
-
+console.log('betting set the minbet to:', gameState.minBet)
 	// use check function to move to next player
 	check(socketId);
 };
 
-const raise = (socketId) => {
+const raise = (socketId, actionAmount) => {
 	const raisingPlayer = gameState.players.filter((player) => player.id === socketId)[0];
 
 	// currently static for now
-	const raiseAmount = gameState.activeBet + 100;
+	const raiseAmount = actionAmount;
+console.log('raise amount', raiseAmount)
+console.log('active bet', gameState.activeBet)
+	// adjust minimum raise
+	gameState.minBet = raiseAmount
 
+	// calculating difference in raise
+	const raiseDifference = gameState.minBet - gameState.activeBet
+console.log('raise difference', raiseDifference)
 	// add to pot bet amount
-	gameState.pot += raiseAmount - raisingPlayer.activeBet;
+	gameState.pot += raiseDifference;
 
 	//subtract from player stack
-	raisingPlayer.bankroll -= raiseAmount - raisingPlayer.activeBet;
+	raisingPlayer.bankroll -= raiseDifference;
 
-	raisingPlayer.activeBet = raiseAmount;
-
+	raisingPlayer.activeBet = gameState.minBet
 	// adjust game active bet
-	gameState.activeBet = raiseAmount;
+	gameState.activeBet = gameState.minBet
+	console.log('raising set the minbet to:', gameState.minBet)
 
+	// set up minBet for next player
+	gameState.minBet = raiseDifference + gameState.activeBet
 	// reset action
 	gameState.players.forEach((player) => {
 		player.action = false;
