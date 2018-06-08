@@ -126,7 +126,8 @@ io.on('connection', (socket) => {
 					resetPlayerAction();
 					moveBlinds();
 					gameState.showdown = false;
-					io.sockets.emit('gameState', gameState);
+					io.sockets.emit('gameState', gameState)
+					io.sockets.emit('sound', 'dealCards');
 				}, 2500);
 			}
 		}

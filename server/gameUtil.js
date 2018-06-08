@@ -210,7 +210,8 @@ const resetGame = () => {
 	gameState.messages = [];
 	gameState.players.forEach((player) => {
 		player.cards = [];
-		player.activeBets = [];	
+		player.activeBet = 0;
+		player.active = false
 	});
 }
 

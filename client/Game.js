@@ -113,7 +113,12 @@ class Test extends Component {
 						<img className="table" src="poker_table.svg" />
 						<SoundEffects sound={this.state.sound} />
 						<Seats clientPlayer={clientPlayer} id={id} players={players} />
-						<Actions
+						<Board pot={this.state.gameState.pot} players={players} board={this.state.gameState.board} />
+						<PlayerCards players={this.state.gameState.players} id={this.state.id} />
+						<OpponentCards spectator={this.state.spectator} showdown={this.state.gameState.showdown} players={this.state.gameState.players} id={this.state.id} />
+						<Chip spectator={this.state.spectator} players={this.state.gameState.players} id={this.state.id} />
+					</div>
+					<Actions
 							showdown={this.state.gameState.showdown}
 							raise={this.raise}
 							bet={this.bet}
@@ -123,11 +128,6 @@ class Test extends Component {
 							check={this.check}
 							activeBet={this.state.gameState.activeBet}
 						/>
-						<Board pot={this.state.gameState.pot} players={players} board={this.state.gameState.board} />
-						<PlayerCards players={this.state.gameState.players} id={this.state.id} />
-						<OpponentCards spectator={this.state.spectator} showdown={this.state.gameState.showdown} players={this.state.gameState.players} id={this.state.id} />
-						<Chip spectator={this.state.spectator} players={this.state.gameState.players} id={this.state.id} />
-					</div>
 					<Chatbox messages={this.state.gameState.messages} messageSubmit={this.messageSubmit} />
 					<Join joined={this.state.joined} players={this.state.gameState.players} join={this.join} />
 				</div>

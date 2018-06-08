@@ -47,6 +47,28 @@ height: 100%;
 width: 100%;
 }
 
+.player-buttons {
+  padding-left: 5px;
+}
+
+.buttons-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.buttons-container-hidden {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  visibility: hidden
+}
+
+
 
 .player-font {
   font-size: 1vw
