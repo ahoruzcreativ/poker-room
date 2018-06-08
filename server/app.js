@@ -102,7 +102,7 @@ io.on('connection', (socket) => {
 		}
 
 		if (action.type === 'bet') {
-			bet(socket.id);
+			bet(socket.id, action.amount);
 			io.sockets.emit('sound', 'chips');
 		}
 

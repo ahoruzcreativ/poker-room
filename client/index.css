@@ -51,6 +51,11 @@ width: 100%;
   padding-left: 5px;
 }
 
+.bet-slider {
+  width: 25%;
+ margin: auto
+}
+
 .buttons-container {
   display: flex;
   align-items: center;

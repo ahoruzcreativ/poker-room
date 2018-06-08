@@ -4,6 +4,7 @@ import Raise from './buttons/Raise';
 import Check from './buttons/Check';
 import Fold from './buttons/Fold';
 import Call from './buttons/Call';
+import BetSlider from './buttons/Slider'
 
 const Actions = (props) => {
 	const showdown = props.showdown;
@@ -16,9 +17,10 @@ const Actions = (props) => {
 					return <div className="buttons-container-hidden" key={player.id} />;
 				} else if (player.active && activeBet <= player.activeBet && showdown === false) {
 					return (
+						<div>
 						<div className="buttons-container" key={player.id}>
 							<div className="player-buttons">
-								<Bet bet={props.bet} activeBet={activeBet} />
+								<Bet betAmount={props.betAmount} bet={props.bet} activeBet={activeBet} />
 							</div>
 							<div className="player-buttons">
 								<Raise raise={props.raise} activeBet={activeBet} player={clientPlayer} />
@@ -30,9 +32,12 @@ const Actions = (props) => {
 								<Fold fold={props.fold} />
 							</div>
 						</div>
+						<BetSlider changeBet={props.changeBet} bankroll={player.bankroll} />
+						</div>
 					);
 				} else if (player.active && activeBet > player.activeBet && showdown === false) {
 					return (
+						<div>
 						<div className="buttons-container" key={player.id}>
 							<div className="player-buttons">
 								<Bet bet={props.bet} activeBet={activeBet} />
@@ -46,6 +51,8 @@ const Actions = (props) => {
 							<div className="player-buttons">
 								<Fold fold={props.fold} />
 							</div>
+						</div>
+						<BetSlider bankroll={player.bankroll} />
 						</div>
 					);
 				}

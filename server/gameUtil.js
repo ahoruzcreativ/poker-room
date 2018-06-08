@@ -249,11 +249,11 @@ const call = (socketId) => {
 	check(socketId);
 };
 
-const bet = (socketId) => {
+const bet = (socketId, actionAmount) => {
 	const bettingPlayer = gameState.players.filter((player) => player.id === socketId)[0];
 
 	// currently static for now
-	const betAmount = 100;
+	const betAmount = actionAmount;
 
 	// add to pot bet amount
 	gameState.pot += betAmount;

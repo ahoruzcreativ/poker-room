@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 
 const Bet = (props) => {
 	if (props.activeBet === 0) {
-		return <Button variant="contained" color="primary" onClick={props.bet}>Bet $100</Button>;
+		return <Button variant="contained" color="primary" onClick={props.bet}>Bet ${props.betAmount}</Button>;
 	} else {
 		return <div />;
 	}

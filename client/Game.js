@@ -36,7 +36,8 @@ class Test extends Component {
 			},
 			sound: 'none',
 			joined: false,
-			spectator: true
+			spectator: true,
+			betAmount: 0
 		};
 		this.check = this.check.bind(this);
 		this.fold = this.fold.bind(this);
@@ -46,6 +47,7 @@ class Test extends Component {
 		this.messageSubmit = this.messageSubmit.bind(this);
 		this.addName = this.addName.bind(this);
 		this.join = this.join.bind(this);
+		this.changeBet = this.changeBet.bind(this);
 		socket = io.connect();
 		socket.on('clientId', (id) => {
 			this.setState({ id });
@@ -77,8 +79,15 @@ class Test extends Component {
 	}
 
 	bet() {
-		const action = { type: 'bet' };
+		const action = { type: 'bet', amount: this.state.betAmount };
 		socket.emit('action', action);
+
+		//clear bet after player action
+		this.setState({ betAmount: 0 });
+	}
+
+	changeBet(amount) {
+		this.setState({ betAmount: amount });
 	}
 
 	raise() {
@@ -115,19 +124,30 @@ class Test extends Component {
 						<Seats clientPlayer={clientPlayer} id={id} players={players} />
 						<Board pot={this.state.gameState.pot} players={players} board={this.state.gameState.board} />
 						<PlayerCards players={this.state.gameState.players} id={this.state.id} />
-						<OpponentCards spectator={this.state.spectator} showdown={this.state.gameState.showdown} players={this.state.gameState.players} id={this.state.id} />
-						<Chip spectator={this.state.spectator} players={this.state.gameState.players} id={this.state.id} />
+						<OpponentCards
+							spectator={this.state.spectator}
+							showdown={this.state.gameState.showdown}
+							players={this.state.gameState.players}
+							id={this.state.id}
+						/>
+						<Chip
+							spectator={this.state.spectator}
+							players={this.state.gameState.players}
+							id={this.state.id}
+						/>
 					</div>
 					<Actions
-							showdown={this.state.gameState.showdown}
-							raise={this.raise}
-							bet={this.bet}
-							call={this.call}
-							fold={this.fold}
-							clientPlayer={clientPlayer}
-							check={this.check}
-							activeBet={this.state.gameState.activeBet}
-						/>
+						betAmount={this.state.betAmount}
+						changeBet={this.changeBet}
+						showdown={this.state.gameState.showdown}
+						raise={this.raise}
+						bet={this.bet}
+						call={this.call}
+						fold={this.fold}
+						clientPlayer={clientPlayer}
+						check={this.check}
+						activeBet={this.state.gameState.activeBet}
+					/>
 					<Chatbox messages={this.state.gameState.messages} messageSubmit={this.messageSubmit} />
 					<Join joined={this.state.joined} players={this.state.gameState.players} join={this.join} />
 				</div>
