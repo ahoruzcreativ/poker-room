@@ -158,6 +158,7 @@ const determineWinner = () => {
 	const board = gameState.board;
 
 	const results = Ranker.orderHands(hands, board);
+	console.log(results)
 	// check for tie
 	if (results[0].length > 1) {
 		potToTie();
@@ -334,10 +335,10 @@ console.log('active bet', gameState.activeBet)
 	const raiseDifference = gameState.minBet - gameState.activeBet
 console.log('raise difference', raiseDifference)
 	// add to pot bet amount
-	gameState.pot += raiseDifference;
+	gameState.pot += gameState.minBet - raisingPlayer.activeBet;
 
 	//subtract from player stack
-	raisingPlayer.bankroll -= raiseDifference;
+	raisingPlayer.bankroll -= gameState.minBet;
 
 		// check to see if player is all in
 if (raisingPlayer.bankroll <= 0) {

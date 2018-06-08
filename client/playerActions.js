@@ -32,7 +32,7 @@ const Actions = (props) => {
 								<Fold fold={props.fold} />
 							</div>
 						</div>
-						<BetSlider  minBet={props.minBet} changeBet={props.changeBet} bankroll={player.bankroll} />
+						<BetSlider  minBet={props.minBet} changeBet={props.changeBet} bankroll={player.bankroll + player.activeBet} />
 						</div>
 					);
 				} else if (player.active && activeBet > player.activeBet && showdown === false) {
@@ -52,7 +52,7 @@ const Actions = (props) => {
 								<Fold fold={props.fold} />
 							</div>
 						</div>
-						<BetSlider  minBet={props.minBet} changeBet={props.changeBet} bankroll={player.bankroll} />
+						<BetSlider  minBet={props.minBet} changeBet={props.changeBet} bankroll={player.bankroll + player.activeBet} />
 						</div>
 					);
 				}

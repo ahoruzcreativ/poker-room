@@ -123,19 +123,21 @@ io.on('connection', (socket) => {
 			// send updated state
 			io.sockets.emit('gameState', gameState);
 			if (gameState.showdown === true) {
+				// note, if player leaves during setTimeout window, state is stuck waiting until next player joins
+				determineWinner();
+				moveBlinds();
 				setTimeout(() => {
-					determineWinner();
 					dealPlayers();
 					resetPlayerAction();
-					moveBlinds();
 					if (determineLose()) {
 						console.log('someone LOST!')
 					}
 					gameState.minBet = 20
 					gameState.showdown = false;
+					gameState.allIn = false
 					io.sockets.emit('gameState', gameState)
 					io.sockets.emit('sound', 'dealCards');
-				}, 2500);
+				}, 4000);
 			}
 		}
 	});
