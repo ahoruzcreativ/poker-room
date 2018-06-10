@@ -149,6 +149,24 @@ div {
   padding: 12px 24px;
 }
 
+.seat-1-active {
+  height: 10%;
+  width: 25%;
+  border-radius: 25px;
+  display: flex;
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #26787c;
+  color: white;
+  font-size: 10px;
+  padding: 12px 24px;
+  border: solid;
+  border-color: yellow
+}
+
 .seat-2 {
   height: 10%;
   width: 25%;
@@ -163,6 +181,24 @@ div {
   color: white;
   font-size: 16px;
   padding: 12px 24px;
+}
+
+.seat-2-active {
+  height: 10%;
+  width: 25%;
+  border-radius: 25px;
+  display: flex;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #26787c;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: solid;
+  border-color: yellow
 }
 
 .board {

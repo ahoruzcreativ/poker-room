@@ -4,12 +4,20 @@ const Seats = (props) => {
 	const players = props.players;
 	const clientPlayer = props.clientPlayer;
 
-	console.log(clientPlayer);
+
 	if (clientPlayer[0]) {
-		console.log(clientPlayer[0]);
+		let active = ''
+		let otherActive = ''
+		if (clientPlayer[0].active === true) {
+			active = '-active'
+			otherActive = ''
+		} else {
+			active = ''
+			otherActive = '-active'
+		}
 		return (
 			<div>
-				<div key={clientPlayer[0].id} className="seat-1">
+				<div key={clientPlayer[0].id} className={'seat-1' + active}>
 					<div className="player">
 						<div className="player-font">{clientPlayer[0].name}</div>
 						<div className="player-font">${clientPlayer[0].bankroll}</div>
@@ -18,7 +26,7 @@ const Seats = (props) => {
 				{players.map((player) => {
 					if (player.id !== props.id) {
 						return (
-							<div key={player.name} className={'seat-2'}>
+							<div key={player.name} className={'seat-2'+ otherActive}>
 								<div className="player">
 									<div className="player-font"> {player.name}</div>
 									<div className="player-font">${player.bankroll}</div>
