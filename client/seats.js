@@ -26,7 +26,7 @@ const Seats = (props) => {
 				{players.map((player) => {
 					if (player.id !== props.id) {
 						return (
-							<div key={player.name} className={'seat-2'+ otherActive}>
+							<div key={player.name} className={'seat-2' + otherActive}>
 								<div className="player">
 									<div className="player-font"> {player.name}</div>
 									<div className="player-font">${player.bankroll}</div>
@@ -38,12 +38,23 @@ const Seats = (props) => {
 			</div>
 		);
 	} else if (clientPlayer.length === 0) {
+		let active = ''
+		let otherActive = ''
+		if (players[0]) {
+			if (players[0].active === true) {
+				active = '-active'
+				otherActive = ''
+			} else {
+				active = ''
+				otherActive = '-active'
+			}
+		}
 		return (
 			<div>
 				{players.map((player) => {
 					if (players.indexOf(player) === 0) {
 						return (
-							<div key={player.name} className={'seat-1'}>
+							<div key={player.name} className={'seat-1' + active}>
 								<div className="player">
 									<div className="player-font"> {player.name}</div>
 									<div className="player-font">${player.bankroll}</div>
@@ -52,7 +63,7 @@ const Seats = (props) => {
 						);
 					} else if (players.indexOf(player) === 1) {
 						return (
-							<div key={player.name} className={'seat-2'}>
+							<div key={player.name} className={'seat-2' + otherActive}>
 								<div className="player">
 									<div className="player-font"> {player.name}</div>
 									<div className="player-font">${player.bankroll}</div>
