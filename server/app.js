@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
-const db = require('./db');
+// const db = require('./db');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const {
@@ -64,9 +64,9 @@ app.use((err, req, res, next) => {
 	res.send(err.message || 'Internal server error');
 });
 
-db.sync().then(() => {
-	console.log('The database is synced');
-});
+// db.sync().then(() => {
+// 	console.log('The database is synced');
+// });
 
 const server = app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 const io = require('socket.io')(server, { pingInterval: 2000, pingTimeout: 5000 });
