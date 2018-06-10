@@ -139,7 +139,7 @@ class Test extends Component {
 			return <Lobby players={players} spectators={this.state.gameState.spectators} addName={this.addName} />;
 		} else {
 			return (
-				<div>
+				<div style={{height: '100%'}}>
 					<div className="container">
 						<img className="table" src="poker_table.svg" />
 						<SoundEffects sound={this.state.sound} />
@@ -171,8 +171,8 @@ class Test extends Component {
 						check={this.check}
 						activeBet={this.state.gameState.activeBet}
 					/>
-					<Chatbox messages={this.state.gameState.messages} messageSubmit={this.messageSubmit} />
 					<Join joined={this.state.joined} players={this.state.gameState.players} join={this.join} />
+					<Chatbox messages={this.state.gameState.messages} messageSubmit={this.messageSubmit} />
 					<Dialog open={this.state.rebuyWindow} onClose={this.handleClose}>
 						<DialogTitle>
 							{' '}

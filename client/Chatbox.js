@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 class Chatbox extends Component {
 	constructor() {
@@ -25,15 +27,20 @@ class Chatbox extends Component {
 	render() {
   const messages = this.props.messages;
 		return (
-			<div style={{ textAlign: 'center',width: '100%',  margin: 'auto' }}>
-				<div style={{ textAlign: 'left', margin: 'auto', backgroundColor: 'white', maxWidth: '50%', height: '150px', overflow: 'scroll' }}>
+			<div className='chatbox-container' >
+			<Paper style={{ align: 'center',  width: '50%',  margin: 'auto' }} elevation={8}>
+			<Typography align="center" variant="subheading" gutterBottom>
+							Chat
+						</Typography>
+				<div className='chatbox'>
 					{messages.map((message) => (
 						<p>
 							{message.author}: {message.text}{' '}
 						</p>
 					))}
-				</div>
-				<input type="text" value={this.state.value} onKeyDown={this.handleSubmit} onChange={this.handleChange} style={{ align: 'center',  width: '50%',  margin: 'auto' }} />
+				</div> 
+				<input type="text" value={this.state.value} onKeyDown={this.handleSubmit} onChange={this.handleChange} style={{ align: 'center',  width: '100%', height: '100%' }} />
+		 </Paper>
 			</div>
 		);
 	}

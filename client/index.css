@@ -7,11 +7,11 @@
 
 /* #363b44 */
 
-/* demo styles */
+/* demo styles
 #demo div {
   font-size: 50px;
   font-weight: 800;
-}
+} */
 
 .container {
   position: relative;
@@ -201,6 +201,20 @@ div {
   border-color: yellow
 }
 
+.chatbox-container {
+  text-align: center;
+  width: 100%;
+  background-color: whitesmoke;
+}
+
+.chatbox {
+  text-align: left;
+  max-width: 100%;
+  height: 150px;
+  overflow: scroll;
+  background-color: whitesmoke;
+  border: inset
+}
 .board {
   width: 40%;
   height:10%;
