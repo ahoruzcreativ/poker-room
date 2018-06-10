@@ -20,10 +20,10 @@ const Actions = (props) => {
 						<div>
 						<div className="buttons-container" key={player.id}>
 							<div className="player-buttons">
-								<Bet betAmount={props.betAmount} bet={props.bet} activeBet={activeBet} />
+								<Bet  betAmount={props.betAmount} bet={props.bet} activeBet={activeBet} />
 							</div>
 							<div className="player-buttons">
-								<Raise betAmount={props.betAmount} raise={props.raise} activeBet={activeBet} player={clientPlayer} />
+								<Raise bankroll={player.bankroll + player.activeBet} betAmount={props.betAmount} raise={props.raise} activeBet={activeBet} player={clientPlayer} />
 							</div>
 							<div className="player-buttons">
 								<Check check={props.check} />
@@ -40,13 +40,13 @@ const Actions = (props) => {
 						<div>
 						<div className="buttons-container" key={player.id}>
 							<div className="player-buttons">
-								<Bet betAmount={props.betAmount} bet={props.bet} activeBet={activeBet} />
+								<Bet  betAmount={props.betAmount} bet={props.bet} activeBet={activeBet} />
 							</div>
 							<div className="player-buttons">
-								<Raise betAmount={props.betAmount} raise={props.raise} activeBet={activeBet} player={clientPlayer} />
+								<Raise bankroll={player.bankroll + player.activeBet} betAmount={props.betAmount} raise={props.raise} activeBet={activeBet} player={clientPlayer} />
 							</div>
 							<div className="player-buttons">
-								<Call call={props.call} activeBet={activeBet} playerActiveBet={player.activeBet} />
+								<Call bankroll={player.bankroll + player.activeBet} call={props.call} activeBet={activeBet} playerActiveBet={player.activeBet} />
 							</div>
 							<div className="player-buttons">
 								<Fold fold={props.fold} />

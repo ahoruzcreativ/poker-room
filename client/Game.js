@@ -13,6 +13,13 @@ import Lobby from './Lobby';
 import Join from './buttons/Join';
 import PlayerCards from './playerCards';
 import OpponentCards from './opponentCards';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 
 let socket;
 const mapStateToProps = (state) => ({ state });
@@ -38,6 +45,7 @@ class Test extends Component {
 			joined: false,
 			spectator: true,
 			betAmount: 10,
+			rebuyWindow: false
 		};
 		this.check = this.check.bind(this);
 		this.fold = this.fold.bind(this);
@@ -60,6 +68,11 @@ class Test extends Component {
 			setTimeout(() => {
 				this.setState({ sound: 'none' });
 			}, 500);
+		});
+		socket.on('rebuy', (id) => {
+			if (id === this.state.id) {
+				this.setState({ rebuyWindow: true });
+			}
 		});
 	}
 
@@ -108,6 +121,16 @@ class Test extends Component {
 		this.setState({ joined: true, spectator: false });
 	}
 
+	handleRebuy = () => {
+		socket.emit('playerRebuy')
+		this.setState({ rebuyWindow: false });
+	}
+
+	handleClose = () => {
+		socket.emit('spectatePlayer')
+		this.setState({ rebuyWindow: false, joined: false });
+	}
+
 	render() {
 		const players = this.state.gameState.players;
 		const id = this.state.id;
@@ -115,7 +138,6 @@ class Test extends Component {
 		if (this.state.name === '') {
 			return <Lobby players={players} spectators={this.state.gameState.spectators} addName={this.addName} />;
 		} else {
-			console.log('minBet', this.state.gameState.minBet)
 			return (
 				<div>
 					<div className="container">
@@ -137,7 +159,7 @@ class Test extends Component {
 						/>
 					</div>
 					<Actions
-					minBet={this.state.gameState.minBet}
+						minBet={this.state.gameState.minBet}
 						betAmount={this.state.betAmount}
 						changeBet={this.changeBet}
 						showdown={this.state.gameState.showdown}
@@ -151,6 +173,27 @@ class Test extends Component {
 					/>
 					<Chatbox messages={this.state.gameState.messages} messageSubmit={this.messageSubmit} />
 					<Join joined={this.state.joined} players={this.state.gameState.players} join={this.join} />
+					<Dialog open={this.state.rebuyWindow} onClose={this.handleClose}>
+						<DialogTitle>
+							{' '}
+							<Typography align="center" variant="subheading" gutterBottom>
+								Would you like to rebuy?
+							</Typography>
+						</DialogTitle>
+						<DialogContent>
+							<TextField margin="normal" onChange={this.handleChange} style={{ width: '100%' }} />
+						</DialogContent>
+						<DialogActions>
+							<div style={{ alignContent: 'center' }}>
+								<Button variant="contained" color="secondary" onClick={this.handleRebuy}>
+									Yes
+								</Button>
+								<Button variant="contained" color="secondary" onClick={this.handleClose}>
+									No
+								</Button>
+							</div>
+						</DialogActions>
+					</Dialog>
 				</div>
 			);
 		}

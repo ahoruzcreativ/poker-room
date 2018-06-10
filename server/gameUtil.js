@@ -29,7 +29,8 @@ const addSpectators = (socketId) => {
 		smallBlind: false,
 		bigBlind: false,
 		active: false,
-		activeBet: 0
+		activeBet: 0,
+		rebuys: 0
 	});
 };
 
@@ -157,26 +158,33 @@ const determineWinner = () => {
 	const hands = gameState.players;
 	const board = gameState.board;
 
-	const results = Ranker.orderHands(hands, board);
-	console.log(results)
-	// check for tie
-	if (results[0].length > 1) {
-		potToTie();
-		const tieMsg = 'Tie pot, both players have ' + results[0][0].description;
-		gameState.messages.push({ text: tieMsg, author: 'Game' });
+	// check to see if any players have left during showdown to prevent server crash
+	if (gameState.players.length > 1 ){
+		const results = Ranker.orderHands(hands, board);
+		console.log(results)
+		// check for tie
+		if (results[0].length > 1) {
+			potToTie();
+			const tieMsg = 'Tie pot, both players have ' + results[0][0].description;
+			gameState.messages.push({ text: tieMsg, author: 'Game' });
+		} else {
+			const winnerId = results[0][0].id;
+			const winner = gameState.players.filter((player) => player.id === winnerId)[0];
+			const winnerMsg = winner.name + ' won $' + gameState.pot + ' with ' + results[0][0].description;
+			gameState.messages.push({ text: winnerMsg, author: 'Game' });
+			potToPlayer(winner);
+		}
+		return true
 	} else {
-		const winnerId = results[0][0].id;
-		const winner = gameState.players.filter((player) => player.id === winnerId)[0];
-		const winnerMsg = winner.name + ' won $' + gameState.pot + ' with ' + results[0][0].description;
-		gameState.messages.push({ text: winnerMsg, author: 'Game' });
-		potToPlayer(winner);
+		return false
 	}
+
 };
 
 const determineLose = () => {
 		for (let i = 0; i < gameState.players.length; i++) {
 			if (gameState.players[i].bankroll <= 0) {
-				return true
+				return gameState.players[i].id
 			}
 		}
 }
@@ -271,14 +279,20 @@ const allInMode = () => {
 
 const call = (socketId) => {
 	const callingPlayer = gameState.players.filter((player) => player.id === socketId)[0];
-	const callAmount = gameState.activeBet - callingPlayer.activeBet;
+	let callAmount = gameState.activeBet;
 
+	// check if call is within player's bankroll, else adjust
+	if (callAmount > callingPlayer.bankroll + callingPlayer.activeBet) {
+		callAmount = callingPlayer.bankroll + callingPlayer.activeBet
+	}
 	// add to pot call amount
-	gameState.pot += callAmount;
-	callingPlayer.activeBet += callAmount;
+	gameState.pot += callAmount - callingPlayer.activeBet;
+	callingPlayer.bankroll -= callAmount - callingPlayer.activeBet ;
+	callingPlayer.activeBet = callAmount;
 
+	console.log('call amount', callAmount)
+	console.log('calling player activeBet', callingPlayer.activeBet)
 	// subtract from player stack
-	callingPlayer.bankroll -= callAmount;
 
 	// check to see if player is all in
 if (callingPlayer.bankroll <= 0) {
@@ -324,8 +338,12 @@ console.log('betting set the minbet to:', gameState.minBet)
 const raise = (socketId, actionAmount) => {
 	const raisingPlayer = gameState.players.filter((player) => player.id === socketId)[0];
 
-	// currently static for now
-	const raiseAmount = actionAmount;
+	let raiseAmount = actionAmount;
+
+	// check if raise is within player's bankroll, else adjust
+	if (raiseAmount > raisingPlayer.bankroll + raisingPlayer.activeBet) {
+		raiseAmount = raisingPlayer.bankroll + raisingPlayer.activeBet
+	}
 console.log('raise amount', raiseAmount)
 console.log('active bet', gameState.activeBet)
 	// adjust minimum raise
@@ -338,7 +356,7 @@ console.log('raise difference', raiseDifference)
 	gameState.pot += gameState.minBet - raisingPlayer.activeBet;
 
 	//subtract from player stack
-	raisingPlayer.bankroll -= gameState.minBet;
+	raisingPlayer.bankroll -= gameState.minBet - raisingPlayer.activeBet;
 
 		// check to see if player is all in
 if (raisingPlayer.bankroll <= 0) {
@@ -383,7 +401,17 @@ const addName = (name, socketId) => {
 	changePlayer.name = name;
 };
 
+const rebuyPlayer = (socketId) => {
+	const clientPlayer = gameState.players.filter((player) => player.id === socketId)[0]
+	clientPlayer.bankroll = 1000
+	clientPlayer.rebuys += 1
+}
 
+const spectatePlayer = (socketId) => {
+	const oldPlayer = gameState.players.filter((player) => player.id == socketId)[0];
+	gameState.spectators.push(oldPlayer)
+	gameState.players = gameState.players.filter((player) => player.id !== socketId);
+};
 
 
 module.exports = {
@@ -406,5 +434,8 @@ module.exports = {
 	addSpectators,
 	resetPlayerAction,
 	determineLose,
-	allInMode
+	allInMode,
+	resetGame,
+	rebuyPlayer,
+	spectatePlayer
 };

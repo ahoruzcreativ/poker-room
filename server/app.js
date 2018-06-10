@@ -25,7 +25,10 @@ const {
 	moveBlinds,
 	determineWinner,
 	determineLose,
-	allInMode
+	allInMode,
+	resetGame,
+	rebuyPlayer,
+	spectatePlayer
 } = require('./gameUtil');
 
 // Logging middleware
@@ -96,6 +99,7 @@ io.on('connection', (socket) => {
 
 		if (action.type === 'fold') {
 			fold(socket.id);
+			io.sockets.emit('sound', 'dealCards');
 		}
 
 		if (action.type === 'call') {
@@ -124,23 +128,36 @@ io.on('connection', (socket) => {
 			io.sockets.emit('gameState', gameState);
 			if (gameState.showdown === true) {
 				// note, if player leaves during setTimeout window, state is stuck waiting until next player joins
-				determineWinner();
-				moveBlinds();
 				setTimeout(() => {
-					dealPlayers();
-					resetPlayerAction();
-					if (determineLose()) {
-						console.log('someone LOST!')
+
+					if (determineWinner()) {
+						resetPlayerAction();
+						moveBlinds();
+						dealPlayers();
+							io.sockets.emit('rebuy', determineLose())
+						gameState.minBet = 20
+						gameState.showdown = false;
+						gameState.allIn = false
+						io.sockets.emit('gameState', gameState)
+						io.sockets.emit('sound', 'dealCards');
+					} else {
+						resetGame()
 					}
-					gameState.minBet = 20
-					gameState.showdown = false;
-					gameState.allIn = false
-					io.sockets.emit('gameState', gameState)
-					io.sockets.emit('sound', 'dealCards');
 				}, 4000);
 			}
 		}
 	});
+
+	socket.on('playerRebuy', () => {
+		rebuyPlayer(socket.id)
+		io.sockets.emit('gameState', gameState)
+	})
+
+	socket.on('spectatePlayer', () => {
+		spectatePlayer(socket.id)
+		resetGame()
+		io.sockets.emit('gameState', gameState)
+	})
 
 	socket.on('message', (message) => {
 		addMessage(message, socket.id);
