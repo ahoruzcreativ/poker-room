@@ -4,6 +4,8 @@ A multiplayer poker game (No Limit Texas Hold'em) built on React/NodeJS that can
 
 * [Demo](https://jason-poker.herokuapp.com/) - Example demo
 
+![[Imgur](https://i.imgur.com/xVruPbG.png)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
