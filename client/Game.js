@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import io from 'socket.io-client';
-import { getPlayer } from './store/clientPlayer';
-import { connect } from 'react-redux';
 import Seats from './seats';
 import Actions from './playerActions';
 import Board from './Board';
@@ -22,8 +20,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 
 let socket;
-const mapStateToProps = (state) => ({ state });
-const mapDispatchToProps = (dispatch) => ({ getPlayer: (id) => dispatch(getPlayer(id)) });
+
 
 class Test extends Component {
 	constructor(props) {
@@ -180,9 +177,6 @@ class Test extends Component {
 								Would you like to rebuy?
 							</Typography>
 						</DialogTitle>
-						<DialogContent>
-							<TextField margin="normal" onChange={this.handleChange} style={{ width: '100%' }} />
-						</DialogContent>
 						<DialogActions>
 							<div style={{ alignContent: 'center' }}>
 								<Button variant="contained" color="secondary" onClick={this.handleRebuy}>
@@ -200,4 +194,4 @@ class Test extends Component {
 	}
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Test);
+export default Test;
