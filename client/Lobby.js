@@ -52,10 +52,16 @@ class Lobby extends Component {
 						}}
 						src="splash.png"
 					/>
-					<Typography style={{ marginTop: '50px' }} align="center" variant="subheading" gutterBottom>
+							<Typography style={{ marginTop: '50px', marginLeft: '50px', marginRight: '50px' }} align="left" variant="subheading" gutterBottom>
+							<i>“Nothing ventured, nothing gained”</i>
+						</Typography>
+					<Typography style={{ marginTop: '30px', marginLeft: '50px', marginRight: '50px' }} align="left" variant="subheading" gutterBottom>
+							Welcome! Game rules are standard <a href="https://en.wikipedia.org/wiki/Texas_hold_%27em">No Limit Texas Hold'em</a>. Players start automatically with a $1000 chip stack. Blinds are $5/$10, and rebuys are currently set to unlimited.
+						</Typography>
+					<Typography style={{ marginTop: '30px', marginLeft: '50px', marginRight: '50px'  }} align="center" variant="subheading" gutterBottom>
 							Active players: {this.props.players.length}
 						</Typography>
-						<Typography align="center" variant="subheading" gutterBottom>
+						<Typography  style={{  marginLeft: '50px', marginRight: '50px' }} align="center" variant="subheading" gutterBottom>
 							Spectators: {this.props.spectators.length}
 						</Typography>
 					<div style={{ textAlign: 'center', marginTop: '50px', marginBottom: '50px' }}>
