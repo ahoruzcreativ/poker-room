@@ -37,6 +37,7 @@ npm run deploy
 * [Material UI](https://material-ui.com/) - React component library
 * [Socket.io](https://socket.io/) - JS library for real-time web apps
 * [Nodejs](https://nodejs.org/en/) - Back-end
+* [Handranker](https://www.npmjs.com/package/handranker) - npm package for poker card ranks
 
 
 
